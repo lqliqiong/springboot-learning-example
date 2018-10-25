@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>spring.boot.core</groupId>
-    <artifactId>spring-listener-event</artifactId>
+    <artifactId>spring-init-data</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-listener-event</name>
-    <description>spring监听事件--启动类</description>
+    <name>spring-init-data</name>
+    <description>spring启动时初始化资源</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

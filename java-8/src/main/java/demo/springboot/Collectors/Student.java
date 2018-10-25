@@ -1,4 +1,4 @@
-package demo.springboot.web;
+package demo.springboot.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,15 +1,15 @@
 package spring.boot.core.domain;
 
+import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 用户实体类
@@ -17,7 +17,8 @@ import java.io.Serializable;
  * Created by bysocket on 21/07/2017.
  */
 @Entity
-public class User implements Serializable {
+@Data
+public class UserFather implements Serializable {
 
     /**
      * 编号
@@ -29,17 +30,27 @@ public class User implements Serializable {
     /**
      * 名称
      */
-    @NotEmpty(message = "姓名不能为空")
-    @Size(min = 2, max = 8, message = "姓名长度必须大于 2 且小于 20 字")
+    @NotNull(message = "姓名不能为空")
     private String name;
+
+
+    /**
+     * 名称
+     */
+    @NotEmpty(message = "姓名不能为空")
+    @Size(min = 3, max = 8, message = "姓名长度必须大于 3 且小于 20 字")
+    private String name1;
 
     /**
      * 年龄
      */
-    @NotNull(message = "年龄不能为空")
-    @Min(value = 0, message = "年龄大于 0")
-    @Max(value = 300, message = "年龄不大于 300")
-    private Integer age;
+//    @NotNull(message = "年龄不能为空")
+//    @Range(min=1, max=3)
+//    private Integer age;
+    @NotNull
+    @Digits(integer = 99999, fraction = 0)
+    @Range(min=1, max=9)
+    private BigDecimal age;
 
     /**
      * 出生时间
@@ -47,45 +58,4 @@ public class User implements Serializable {
     @NotEmpty(message = "出生时间不能为空")
     private String birthday;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public String getBirthday() {
-        return birthday;
-    }
-
-    public void setBirthday(String birthday) {
-        this.birthday = birthday;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", birthday=" + birthday +
-                '}';
-    }
 }

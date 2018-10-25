@@ -1,4 +1,8 @@
-package com.winterbe.java8.samples.time;
+package demo.springboot.Collectors;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -8,9 +12,9 @@ import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 
-/**
- * @author Benjamin Winterberg
- */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GoodsCate {
 
     private Long cateId;

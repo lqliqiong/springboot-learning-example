@@ -1,8 +1,14 @@
-package com.winterbe.java8.samples.stream;
+package demo.springboot.Collectors;
+
+import jdk.nashorn.internal.parser.JSONParser;
+import netscape.javascript.JSObject;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -10,171 +16,82 @@ import java.util.stream.Stream;
  *
  * @author Benjamin Winterberg
  */
-public class Streams5 {
+public class Streams {
 
-    public static void main(String[] args) {
-        List<String> strings =
-            Arrays.asList("d2", "a2", "b1", "b3", "c");
-
-//        test1(strings);
-//        test2(strings);
-//        test3(strings);
-//        test4(strings);
-//        test5(strings);
-//        test6(strings);
-//        test7(strings);
-//        test8(strings);
-
-
-        test77()
-    }
-
-    private static void test8(List<String> stringCollection) {
-        Supplier<Stream<String>> streamSupplier =
-            () -> stringCollection
-                .stream()
-                .filter(s -> s.startsWith("a"));
-        System.out.println(streamSupplier.get());
-        System.out.println( streamSupplier.get().anyMatch(s -> true));
-        streamSupplier.get().anyMatch(s -> true);
-        streamSupplier.get().noneMatch(s -> true);
-    }
-
-    // stream has already been operated upon or closed
-    private static void test7(List<String> stringCollection) {
-        Stream<String> stream = stringCollection
-            .stream()
-            .filter(s -> s.startsWith("a"));
-//        System.out.println(stream);
-        stream.anyMatch(s -> true);
-        stream.noneMatch(s -> true);
-    }
-
-    // short-circuit
-    private static void test6(List<String> stringCollection) {
-        stringCollection
-            .stream()
-            .map(s -> {
-                System.out.println("map:      " + s);
-                return s.toUpperCase();
-            })
-            .anyMatch(s -> {
-                System.out.println("anyMatch: " + s);
-                return s.startsWith("A");
-            });
-        System.out.println(stringCollection);
-    }
-
-    private static void test5(List<String> stringCollection) {
-        stringCollection
-            .stream()
-            .filter(s -> {
-                System.out.println("filter:  " + s);
-                return s.toLowerCase().startsWith("a");
-            })
-            .sorted((s1, s2) -> {
-                System.out.printf("sort:    %s; %s\n", s1, s2);
-                return s1.compareTo(s2);
-            })
-            .map(s -> {
-                System.out.println("map:     " + s);
-                return s.toUpperCase();
-            })
-            .forEach(s -> System.out.println("forEach: " + s));
-    }
-
-    // sorted = horizontal
-    private static void test4(List<String> stringCollection) {
-        stringCollection
-            .stream()
-            .sorted((s1, s2) -> {
-                System.out.printf("sort:    %s; %s\n", s1, s2);
-                return s1.compareTo(s2);
-            })
-            .filter(s -> {
-                System.out.println("filter:  " + s);
-                return s.toLowerCase().startsWith("b");
-            })
-            .map(s -> {
-                System.out.println("map:     " + s);
-                return s.toUpperCase();
-            })
-            .forEach(s -> System.out.println("forEach: " + s));
-    }
-
-    private static void test3(List<String> stringCollection) {
-        stringCollection
-            .stream()
-            .filter(s -> {
-                System.out.println("filter:  " + s);
-                return s.startsWith("a");
-            })
-            .map(s -> {
-                System.out.println("map:     " + s);
-                return s.toUpperCase();
-            })
-            .forEach(s -> System.out.println("forEach: " + s));
-    }
-
-    private static void test2(List<String> stringCollection) {
-        stringCollection
-            .stream()
-            .map(s -> {
-                System.out.println("map:     " + s);
-                return s.toUpperCase();
-            })
-            .filter(s -> {
-                System.out.println("filter:  " + s);
-                return s.startsWith("A");
-            })
-            .forEach(s -> System.out.println("forEach: " + s));
-    }
-
-    private static void test1(List<String> stringCollection) {
-        stringCollection
-            .stream()
-            .filter(s -> {
-                System.out.println("filter:  " + s);
-                return true;
-            })
-            .forEach(s -> System.out.println("forEach: " + s));
-    }
 
     /**
      * 1----
-     *     11---
-     *         ----111
-     *         ----112
-     *     12---
-     *         ---121
-     *         ---122
-     *         ---123
-     *     13---
-     *         ---131
-     *         ---132
-     *         ---133
-     *  2----
-     *     21---
-     *         ----211
-     *         ----212
-     *     22---
-     *         ---221
-     *         ---222
-     *         ---223
-     *  3----
-     *     31---
-     *         ----311
-     *         ----312
+     * 11---
+     * ----111
+     * ----112
+     * 12---
+     * ---121
+     * ---122
+     * ---123
+     * 13---
+     * ---131
+     * ---132
+     * ---133
+     * 2----
+     * 21---
+     * ----211
+     * ----212
+     * 22---
+     * ---221
+     * ---222
+     * ---223
+     * 3----
+     * 31---
+     * ----311
+     * ----312
      */
 
 
-    private static  void test77(){
+    private static void test77() {
         //1-(全选)  21-(全选)
         //3-(全选)
-        List<Long> cateIds =
-                Arrays.asList("3", "31", "311", "312");
+        List<Long> cateIds = Arrays.asList(3L, 31L, 311L, 312L);
+        List<GoodsCate> cateList = Arrays.asList(
+                new GoodsCate(3L, "3L", null),
+                new GoodsCate(31L, "31L", 3L),
+                new GoodsCate(311L, "311L", 31L),
+                new GoodsCate(312L, "312L", 31L)
+        );
+        List<GoodsCate> base =cateList;
+        cateList = cateList.stream().filter(item -> base.stream().noneMatch(i -> item.getCateParentId() == i.getCateId())).collect(Collectors.toList());
+        List<String> scopeNames = (cateList.stream().map(GoodsCate::getCateName).collect(Collectors.toList()));
+
+        System.out.println(scopeNames);
+    }
 
 
+    private static void test88() {
+        //(123)  21-(全选)  3-(全选)
+        List<Long> cateIds = Arrays.asList(3L, 31L, 311L, 312L);
+        List<GoodsCate> cateList = Arrays.asList(
+                new GoodsCate(123L, "123L", 12L),
+//                * 21---
+//                * ----211
+//                * ----212
+                new GoodsCate(21L, "21L", 2L),
+                new GoodsCate(211L, "211L", 21L),
+                new GoodsCate(212L, "212L", 21L),
 
+                new GoodsCate(3L, "3L", null),
+                new GoodsCate(31L, "31L", 3L),
+                new GoodsCate(311L, "311L", 31L),
+                new GoodsCate(312L, "312L", 31L)
+        );
+//        cateList.add(new GoodsCate(412L, "412L", 41L));
+        List<GoodsCate> base =cateList;
+
+        cateList = cateList.stream().filter(item -> base.stream().noneMatch(i -> item.getCateParentId() == i.getCateId())).collect(Collectors.toList());
+        List<String> scopeNames = (cateList.stream().map(GoodsCate::getCateName).collect(Collectors.toList()));
+
+        System.out.println(scopeNames);
+    }
+    public static void main(String[] args) {
+        test77();
+        test88();
     }
 }
